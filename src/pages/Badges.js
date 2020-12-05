@@ -44,7 +44,7 @@ export class Badges extends Component {
 
   render() {
     return (
-      <div>
+      <React.Fragment>
         <div className="Badges">
           <div className="Badges__hero">
             <div className="Badges__container">
@@ -65,7 +65,7 @@ export class Badges extends Component {
           </div>
         </div>
 
-      </div>
+      </React.Fragment>
 
     )
   }
