@@ -17,7 +17,7 @@ export class BadgeForm extends Component {
       <div>
         <h1>New Attendant</h1>
 
-        <form>
+        <form onSubmit={this.props.onSubmit}>
           <div className="form-group">
             <label>First Name</label>
             <input 
@@ -78,7 +78,7 @@ export class BadgeForm extends Component {
             </input>
           </div>
 
-          <button type="button" className="btn btn-primary">Save</button>
+          <button className="btn btn-primary">Save</button>
         </form>
       </div>
     )
