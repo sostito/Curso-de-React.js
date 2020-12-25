@@ -26,9 +26,28 @@ class BadgesListItem extends React.Component {
   }
 }
 
-class BadgesList extends React.Component {
-  render() {
-    if(this.props.badges.lenght == 0) {
+function useSearchBadges(badges) {
+  const [query, setQuery] = React.useState("");
+  const [filteredBadges, setFilteredBadges] = React.useState(badges);
+
+  React.useMemo(() => {
+    const result = badges.filter(badge => {
+      return `${badge.firstName} ${badge.lastName}`
+        .toLowerCase()
+        .includes(query.toLowerCase());
+    })
+
+    setFilteredBadges(result);
+  }, [badges, query]);
+  
+  return { query, setQuery, filteredBadges }
+}
+
+function BadgesList(props) {
+  const badges = props.badges;
+
+  const { query, setQuery, filteredBadges } = useSearchBadges(badges);
+    if(filteredBadges.lenght == 0) {
       return (
       <div>
         <h3>No encontramos ningún badge</h3>
@@ -40,8 +59,17 @@ class BadgesList extends React.Component {
 
     return (
       <div className="BadgesList">
+        <div className="form-group">
+          <label>Filter Badges</label>
+          <input type="text" class="form-control"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value)
+            }}
+          />
+        </div>
         <ul className="list-unstyled">
-          {this.props.badges.map(badge => {
+          {filteredBadges.map(badge => {
             return (
               <li key={badge.id}>
                 <Link className="text-reset text-decoration-none" to={`/badges/${badge.id}`} >
@@ -53,7 +81,6 @@ class BadgesList extends React.Component {
         </ul>
       </div>
     );
-  }
 }
 
 export default BadgesList;
