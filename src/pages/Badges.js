@@ -9,41 +9,49 @@ import PageError from '../components/PageError'
 
 import api from '../api';
 
+// Redux
+import { connect } from 'react-redux';
+
 export class Badges extends Component {
 
-  constructor(props) {
-    super(props)
-
-    this.state = {
-      loading: true,
-      error: null,
-      data: undefined
-    }
+  constructor() {
+    super()
   }
   
-  componentDidMount() {
+  componentDidMount() {    
     this.fetchData();
   }
 
+  // Llena la data de Badges
   fetchData = async () => {
-    this.setState({loading: true, error: null});
-
     try {
       const data = await api.badges.list();
-      this.setState({loading: false, data: data});
+      this.props.dispatch({
+      type: 'BADGES',
+      payload: {
+        data,
+        loading: false
+      }
+    })
     } catch(error) {
-      this.setState({loading: false, error: error});
+      this.props.dispatch({
+      type: 'BADGES',
+      payload: {
+        loading: false,
+        error: error
+      }
+    })
     }
   }
   
   render() {
     
-    if (this.state.loading == true) {
+    if (this.props.loading == true) {
       return <PageLoading />
     }
     
-    if (this.state.error) {
-      return <PageError error={this.state.error}/>
+    if (this.props.error) {
+      return <PageError error={this.props.error}/>
     }
 
     return (
@@ -64,7 +72,7 @@ export class Badges extends Component {
 
         <div className="Badge__list">
           <div className="Badges__container">
-            <BadgesList badges={this.state.data}/>
+            <BadgesList badges={this.props.data}/>
           </div>
         </div>
 
@@ -74,4 +82,16 @@ export class Badges extends Component {
   }
 }
 
-export default Badges
+function mapStateProps(state, props) {
+  console.log(state)
+  if (state.badges) {
+    return {
+      data: state.badges.data,
+      error: state.badges.error,
+      loading: state.badges.loading
+    }
+  }
+  return {}
+}
+
+export default connect(mapStateProps)(Badges)

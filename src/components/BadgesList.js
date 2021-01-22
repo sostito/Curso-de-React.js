@@ -61,7 +61,7 @@ function BadgesList(props) {
       <div className="BadgesList">
         <div className="form-group">
           <label>Filter Badges</label>
-          <input type="text" class="form-control"
+          <input type="text" className="form-control"
             value={query}
             onChange={(e) => {
               setQuery(e.target.value)
@@ -83,4 +83,5 @@ function BadgesList(props) {
     );
 }
 
-export default BadgesList;
+
+export default BadgesList
